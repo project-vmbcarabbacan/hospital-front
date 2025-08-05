@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Box, CssBaseline, Toolbar, useTheme } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
-import TopBar from '../components/TopBar';
-import Sidebar from '../components/Sidebar';
+import TopBar from '../layouts/TopBar';
+import Sidebar from '../layouts/Sidebar';
 import Dashboard from './Dashboard';
 import Users from './Users';
 import Reports from './Reports';

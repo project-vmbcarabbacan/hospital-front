@@ -21,7 +21,7 @@ import { UserLoginDTO } from '../../app/DTO/UserLoginDTO';
 import axios from 'axios';
 import { ApiError } from '../../domain/entities/ApiError';
 import { Email } from '../../domain/valueObjects/Email';
-import PasswordField from '../components/Inputs/PasswordField';
+import PasswordField from '../components/shared/PasswordField';
 
 const LoginPage: React.FC = () => {
 
