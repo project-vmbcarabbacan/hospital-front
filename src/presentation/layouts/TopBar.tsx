@@ -11,7 +11,7 @@ interface TopBarProps {
 
 const TopBar: React.FC<TopBarProps> = ({ handleDrawerToggle }) => {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'lg'));
 
     if (!isMobile) return null
 

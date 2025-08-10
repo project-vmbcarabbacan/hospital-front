@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import {
     Avatar,
     IconButton,
@@ -9,12 +9,10 @@ import {
     DialogContent,
     Button,
     Slider,
-    Stack,
-    Typography
 } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Cropper from 'react-easy-crop';
-import getCroppedImg from '../utils/circularCropImage';
+import getCroppedImg from '../utils/cropImage';
 
 interface AvatarUploadProps {
     onImageChange: (image: string) => void;
@@ -23,6 +21,8 @@ interface AvatarUploadProps {
     maxSizeMB?: number;
 }
 
+const cornerSize = 12;
+
 const AvatarUploadWithCrop: React.FC<AvatarUploadProps> = ({
     onImageChange,
     initialImage,
@@ -30,14 +30,21 @@ const AvatarUploadWithCrop: React.FC<AvatarUploadProps> = ({
     maxSizeMB = 2,
 }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [croppedImage, setCroppedImage] = useState<string | undefined>(initialImage);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
-    const [rotation, setRotation] = useState(0);
     const [cropAreaPixels, setCropAreaPixels] = useState<any>(null);
     const [openCrop, setOpenCrop] = useState(false);
 
+    // Natural image size (width/height)
+    const [naturalSize, setNaturalSize] = useState<{ width: number; height: number } | null>(null);
+
+    // Container size
+    const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null);
+
+    // Handle file select
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -60,15 +67,49 @@ const AvatarUploadWithCrop: React.FC<AvatarUploadProps> = ({
         reader.readAsDataURL(file);
     };
 
+    // When imageSrc changes, get natural size
+    useEffect(() => {
+        if (!imageSrc) {
+            setNaturalSize(null);
+            return;
+        }
+        const img = new Image();
+        img.src = imageSrc;
+        img.onload = () => {
+            setNaturalSize({ width: img.naturalWidth, height: img.naturalHeight });
+        };
+    }, [imageSrc]);
+
+    // Get container size when dialog opens or window resizes
+    useEffect(() => {
+        const updateContainerSize = () => {
+            if (containerRef.current) {
+                setContainerSize({
+                    width: containerRef.current.offsetWidth,
+                    height: containerRef.current.offsetHeight,
+                });
+            }
+        };
+
+        if (openCrop) {
+            updateContainerSize();
+            window.addEventListener('resize', updateContainerSize);
+        }
+
+        return () => window.removeEventListener('resize', updateContainerSize);
+    }, [openCrop]);
+
     const onCropComplete = useCallback((_croppedArea, croppedAreaPixels) => {
         setCropAreaPixels(croppedAreaPixels);
     }, []);
 
     const handleCropSave = async () => {
+        if (!imageSrc || !cropAreaPixels) return;
+
         try {
-            const { base64, blob } = await getCroppedImg(imageSrc!, cropAreaPixels, rotation);
-            setCroppedImage(base64);
-            onImageChange(blob);
+            const cropped = await getCroppedImg(imageSrc, cropAreaPixels);
+            setCroppedImage(cropped);
+            onImageChange(cropped);
         } catch (error) {
             console.error('Cropping failed:', error);
         }
@@ -77,6 +118,41 @@ const AvatarUploadWithCrop: React.FC<AvatarUploadProps> = ({
 
     const handleClick = () => {
         fileInputRef.current?.click();
+    };
+
+    // Calculate scaled crop box styles
+    const getCropBoxStyle = () => {
+        if (!cropAreaPixels || !naturalSize || !containerSize) return {};
+
+        const scaleX = containerSize.width / naturalSize.width;
+        const scaleY = containerSize.height / naturalSize.height;
+
+        return {
+            position: 'absolute' as const,
+            border: '2px solid #4caf50',
+            boxSizing: 'border-box' as const,
+            pointerEvents: 'none' as const,
+            left: cropAreaPixels.x * scaleX,
+            top: cropAreaPixels.y * scaleY,
+            width: cropAreaPixels.width * scaleX,
+            height: cropAreaPixels.height * scaleY,
+        };
+    };
+
+    // Positions for corners
+    const getCornerPosition = (corner: string): React.CSSProperties => {
+        switch (corner) {
+            case 'topLeft':
+                return { top: 0, left: 0, transform: `translate(-50%, -50%)` };
+            case 'topRight':
+                return { top: 0, right: 0, transform: `translate(50%, -50%)` };
+            case 'bottomLeft':
+                return { bottom: 0, left: 0, transform: `translate(-50%, 50%)` };
+            case 'bottomRight':
+                return { bottom: 0, right: 0, transform: `translate(50%, 50%)` };
+            default:
+                return {};
+        }
     };
 
     return (
@@ -109,46 +185,55 @@ const AvatarUploadWithCrop: React.FC<AvatarUploadProps> = ({
                 </IconButton>
             </Box>
 
-            <Dialog open={openCrop} fullWidth maxWidth="sm">
+            <Dialog open={openCrop} fullWidth maxWidth="sm" onClose={() => setOpenCrop(false)}>
                 <DialogTitle>Crop Image</DialogTitle>
                 <DialogContent>
-                    <Box sx={{ position: 'relative', width: '100%', height: 300 }}>
-                        <Cropper
-                            image={imageSrc!}
-                            crop={crop}
-                            zoom={zoom}
-                            rotation={rotation}
-                            aspect={1}
-                            cropShape="round"
-                            showGrid={false}
-                            onCropChange={setCrop}
-                            onZoomChange={setZoom}
-                            onRotationChange={setRotation}
-                            onCropComplete={onCropComplete}
-                        />
+                    <Box
+                        ref={containerRef}
+                        sx={{ position: 'relative', width: '100%', height: 300, bgcolor: '#333' }}
+                    >
+                        {imageSrc && (
+                            <Cropper
+                                image={imageSrc}
+                                crop={crop}
+                                zoom={zoom}
+                                aspect={1}
+                                onCropChange={setCrop}
+                                onZoomChange={setZoom}
+                                onCropComplete={onCropComplete}
+                            />
+                        )}
+
+                        {/* Crop box overlay with corner dots */}
+                        {cropAreaPixels && naturalSize && containerSize && (
+                            <div style={getCropBoxStyle()}>
+                                {['topLeft', 'topRight', 'bottomLeft', 'bottomRight'].map((corner) => (
+                                    <div
+                                        key={corner}
+                                        style={{
+                                            position: 'absolute',
+                                            width: cornerSize,
+                                            height: cornerSize,
+                                            backgroundColor: 'red',
+                                            borderRadius: '50%',
+                                            border: '2px solid white',
+                                            boxSizing: 'border-box',
+                                            ...getCornerPosition(corner),
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </Box>
-                    <Stack spacing={2} mt={2}>
-                        <Box>
-                            <Typography variant="body2">Zoom</Typography>
-                            <Slider
-                                min={1}
-                                max={3}
-                                step={0.1}
-                                value={zoom}
-                                onChange={(_, value) => setZoom(value as number)}
-                            />
-                        </Box>
-                        <Box>
-                            <Typography variant="body2">Rotation</Typography>
-                            <Slider
-                                min={0}
-                                max={360}
-                                step={1}
-                                value={rotation}
-                                onChange={(_, value) => setRotation(value as number)}
-                            />
-                        </Box>
-                    </Stack>
+
+                    <Slider
+                        min={1}
+                        max={3}
+                        step={0.1}
+                        value={zoom}
+                        onChange={(_, value) => setZoom(value as number)}
+                        sx={{ mt: 2 }}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenCrop(false)}>Cancel</Button>

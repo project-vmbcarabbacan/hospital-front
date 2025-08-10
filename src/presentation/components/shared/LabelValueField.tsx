@@ -1,12 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { LabelValue } from "../utils/types";
 
-interface LabelValueProps {
-    label: string
-    value: string
-}
 
-const LabelValueField: React.FC<LabelValueProps> = ({
+const LabelValueField: React.FC<LabelValue> = ({
     label, value
 }) => {
     return (
@@ -26,7 +23,7 @@ const LabelValueField: React.FC<LabelValueProps> = ({
             </Typography>
             <Typography
                 variant="body2"
-                sx={{ fontWeight: 400, fontSize: 14 }}
+                sx={{ fontWeight: 500, fontSize: 14 }}
             >
                 {value}
             </Typography>

@@ -26,7 +26,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, handleDrawerToggle, drawerWidth }) => {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'lg'));
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -288,8 +288,8 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, handleDrawerToggle, drawe
 
     return (
         <Box component="nav" sx={{
-            width: { sm: drawerWidth },
-            flexShrink: { sm: 0 },
+            width: { lg: drawerWidth },
+            flexShrink: { lg: 0 },
             backgroundColor: theme.palette.background.default,
         }}>
             {isMobile ? (
@@ -300,7 +300,7 @@ const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, handleDrawerToggle, drawe
                     ModalProps={{ keepMounted: true }}
                     sx={{
                         zIndex: (theme) => theme.zIndex.appBar + 1,
-                        display: { xs: 'block', sm: 'none' },
+                        display: { md: 'block', lg: 'none' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                     }}
                 >

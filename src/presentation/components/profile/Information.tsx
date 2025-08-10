@@ -1,7 +1,9 @@
 import React from "react";
 import { Box, Typography, Paper, Grid, useTheme, useMediaQuery } from "@mui/material";
 import LabelValueField from "../shared/LabelValueField";
-import AvatarCropper from "../shared/CircularAvatarField";
+import AvatarCropper from "../shared/AvatarField";
+import StatusField from "../shared/StatusField";
+import Rating from '@mui/material/Rating';
 
 interface InformationProps {
     name: string
@@ -9,15 +11,17 @@ interface InformationProps {
     contact: string
     status: string
     avatarUrl: string
+    role: string
+    department: string
+    rating: number
     isFlex: boolean
 }
 
 const ProfileInformation: React.FC<InformationProps> = ({
-    name, email, contact, status, avatarUrl, isFlex
+    name, email, contact, status, avatarUrl, role, department, rating, isFlex
 }) => {
-    const isActive = status === "Active";
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'lg'));
 
     const handleAvatarChange = (image: string) => {
         // setAvatar(image)
@@ -29,78 +33,69 @@ const ProfileInformation: React.FC<InformationProps> = ({
             sx={{
                 maxWidth: "500",
                 margin: 'auto',
-                mt: 5,
+                mt: 3,
                 display: isFlex ? 'flex' : 'block',
-                gap: 3
+                gap: 3,
+                px: 2
             }}
         >
             <Paper
                 elevation={3}
-                sx={{ p: 3, borderRadius: "15px", }}
+                sx={{ p: 3, borderRadius: "15px", width: '100%' }}
             >
                 <Grid container spacing={2}>
                     <Grid
-                        size={{ xs: 12, md: 3 }}
+                        size={{ xs: 12, xl: 3 }}
                         sx={{ display: "flex", justifyContent: "center" }}
                     >
-                        {/* <Avatar
-                            src={avatarUrl}
-                            alt={name}
-                            sx={{ width: 130, height: 130 }}
-                        /> */}
-                        <AvatarCropper
-                            initialImage={avatarUrl}
-                            onImageChange={(imgUrl) => handleAvatarChange(imgUrl)}
-                            size={130}
-                        />
 
+                        <Grid>
+                            <AvatarCropper
+                                initialImage={avatarUrl}
+                                onImageChange={(imgUrl) => handleAvatarChange(imgUrl)}
+                                size={130}
+                            />
+                            {rating > 0 ?
+                                (
+                                    <Rating defaultValue={rating} precision={0.1} readOnly />
+                                ) : ('')
+                            }
+                        </Grid>
                     </Grid>
-                    <Grid size={{ xs: 12, md: 9 }}>
-                        <Grid container spacing={isMobile ? 0 : 4}
+                    <Grid size={{ xs: 12, xl: 9 }}>
+                        <Grid container
                         >
                             <Grid
-                                size={{ xs: 12, md: 8.5 }}
+                                size={{ xs: 12, lg: 8.5 }}
                             >
 
-                                <Typography variant="h5" sx={{ textAlign: isMobile ? 'center' : 'start' }} >
+                                <Typography variant="h5" textAlign={isMobile ? 'center' : 'start'} >
                                     {name}
                                 </Typography>
 
                             </Grid>
                             <Grid
-                                size={{ xs: 12, md: 3.5 }}
+                                size={{ xs: 12, lg: 3.5 }}
                             >
-                                <Box
-                                    sx={{
-                                        backgroundColor: isActive ? "#C8E6C9" : "#FFCDD2",
-                                        color: isActive ? "#2E7D32" : "#C62828",
-                                        px: 2,
-                                        py: 0.5,
-                                        borderRadius: "20px",
-                                        fontWeight: "bold",
-                                        fontSize: "0.875rem",
-                                        width: isMobile ? "35%" : "100%",
-                                        textAlign: isMobile ? 'center' : 'start',
-                                        justifySelf: isMobile ? 'center' : 'start'
-                                    }}
-                                >
-                                    {status}
-                                </Box>
+                                <StatusField
+                                    text={status}
+                                />
                             </Grid>
                         </Grid>
                         <Grid
-                            container spacing={isMobile ? 0 : 6}
+                            container
+                            justifyContent={'space-between'}
                         >
-                            <Grid size={{ xs: 12, md: 4 }} >
+                            <Grid size={{ xs: 12, lg: 4 }} >
                                 <LabelValueField
                                     label="Role"
-                                    value="User"
+                                    value={role}
                                 />
                             </Grid>
-                            <Grid size={{ xs: 12, md: 8 }} >
+                            <Grid size={{ xs: 12, lg: 6 }}>
                                 <LabelValueField
                                     label="Department"
-                                    value="IT Department"
+                                    value={department}
                                 />
                             </Grid>
                         </Grid>
