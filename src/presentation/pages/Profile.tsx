@@ -1,25 +1,47 @@
 // src/pages/Reports.tsx
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Grid } from '@mui/material';
 import ProfileInformation from '../components/profile/Information';
 import BasicInformation from '../components/profile/Basic';
 import TabInformation from '../components/profile/Tabs';
+import { useDispatch } from 'react-redux';
+import { getProfileById } from '../../app/store/slices/profileSlice';
+import { ID } from '../../domain/valueObjects/ID';
+import { useAppSelector } from '../../app/store/hooks';
 
 const Reports: React.FC = () => {
+
+    const dispatch = useDispatch()
+    const hasDispatched = useRef(false)
+
+    useEffect(() => {
+        if (!hasDispatched.current) {
+            hasDispatched.current = true
+            dispatch(getProfileById(new ID(1)))
+        }
+    }, [dispatch])
+
+    const { profile_information } = useAppSelector(state => state.profile)
+
     return (
         <Grid container >
             <Grid size={{ xs: 12, lg: 5 }}>
-                <ProfileInformation
-                    name="Vincent Carabbacan"
-                    email="vmbcarabbacan@gmail.com"
-                    contact="+971 56 636 8779"
-                    avatarUrl="https://i.pravatar.cc/150?img=12"
-                    status='Inactive'
-                    role="User"
-                    department="IT Department"
-                    rating={4.2}
-                    isFlex={true}
-                />
+                {profile_information ?
+                    (
+                        <ProfileInformation
+                            name={profile_information!.name}
+                            email={profile_information!.email}
+                            contact={profile_information!.contact}
+                            avatarUrl={profile_information!.avatar_url}
+                            status={profile_information!.status}
+                            role={profile_information!.role}
+                            department={profile_information!.department}
+                            rating={profile_information!.rating}
+                            isFlex={true}
+                        />
+                    ) : ('')
+                }
+
                 <BasicInformation
                     employeeId={12345}
                     hireDate="03/15/2017"

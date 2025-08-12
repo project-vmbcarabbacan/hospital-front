@@ -82,7 +82,7 @@ const ProfileInformation: React.FC<InformationProps> = ({
                                 />
                             </Grid>
                         </Grid>
-                        <Grid
+                        {/* <Grid
                             container
                             justifyContent={'space-between'}
                         >
@@ -98,7 +98,27 @@ const ProfileInformation: React.FC<InformationProps> = ({
                                     value={department}
                                 />
                             </Grid>
-                        </Grid>
+                        </Grid> */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                            }}
+                        >
+                            <LabelValueField
+                                label="Role"
+                                value={role}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                            }}
+                        >
+                            <LabelValueField
+                                label="Department"
+                                value={department}
+                            />
+                        </Box>
                         <Box
                             sx={{
                                 display: "flex",
