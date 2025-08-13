@@ -21,7 +21,7 @@ const Reports: React.FC = () => {
         }
     }, [dispatch])
 
-    const { profile_information } = useAppSelector(state => state.profile)
+    const { profile_information, basic_information } = useAppSelector(state => state.profile)
 
     return (
         <Grid container >
@@ -42,18 +42,19 @@ const Reports: React.FC = () => {
                     ) : ('')
                 }
 
-                <BasicInformation
-                    employeeId={12345}
-                    hireDate="03/15/2017"
-                    workFor="7years and 6months"
-                    licenseNumber="12345-678-9-0"
-                    licenseExpiry='2026-06-26'
-                    birthDate="1992-03-15"
-                    address="Dubai, Dubai"
-                    daysOfWorking="Mon - Fri"
-                    workTimings="08:00AM to 05:00PM"
-                    occupationType="Full time"
-                />
+                {basic_information ?
+                    (<BasicInformation
+                        employeeId={basic_information!.employee_id}
+                        hireDate={basic_information!.hired_date}
+                        workFor={basic_information!.work_for}
+                        licenseNumber={basic_information!.license_number}
+                        licenseExpiry={basic_information!.license_expiry}
+                        birthDate={basic_information!.birth_date}
+                        address={basic_information!.address}
+                        daysOfWorking={basic_information!.days_of_working}
+                        workTimings={basic_information!.work_timing}
+                        occupationType={basic_information!.occupation_type}
+                    />) : ('')}
             </Grid>
             <Grid size={{ xs: 12, lg: 7 }}>
                 <TabInformation />

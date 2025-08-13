@@ -45,7 +45,6 @@ const profileSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getProfileById.fulfilled, (state: ProfileState, actions: PayloadAction<Profile>) => {
-                console.log({ actions })
                 state.profile_information = actions.payload.profile_information
                 state.basic_information = actions.payload.basic_information
             })

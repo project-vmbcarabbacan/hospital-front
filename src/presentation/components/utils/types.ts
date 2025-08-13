@@ -33,13 +33,13 @@ export interface ProfileInformation {
 
 export interface BasicInformation {
     employee_id: number,
-    hireDate: string,
-    workFor: string,
-    licenseNumber: string,
-    licenseExpiry: string,
-    birthDate: string,
+    hired_date: string,
+    work_for: string,
+    license_number: string,
+    license_expiry: string,
+    birth_date: string,
     address: string,
-    daysOfWorking: string,
-    workTimings: string,
-    occupationType: string,
+    days_of_working: string,
+    work_timing: string,
+    occupation_type: string,
 }
