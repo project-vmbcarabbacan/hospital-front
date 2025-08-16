@@ -1,7 +1,7 @@
 export class Password {
     private readonly password: string;
 
-    private constructor(password: string) {
+    constructor(password: string) {
         this.password = password;
     }
 

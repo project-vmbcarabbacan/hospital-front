@@ -1,8 +1,10 @@
+
 export const TOKENS = {
     ApiService: 'ApiService',
     AuthRepository: 'AuthRepository',
     ThemeRepository: 'ThemeRepository',
     ProfileRepositoryImp: 'ProfileRepositoryImp',
+    ScheduleRepository: 'ScheduleRepository',
 
     LoginUseCase: 'LoginUseCase',
     LoggedInUserUseCase: 'LoggedInUserUseCase',
@@ -13,4 +15,6 @@ export const TOKENS = {
     AuthService: 'AuthService',
 
     ProfileUseCase: 'ProfileUseCase',
+    ProfileUpdateUseCase: 'ProfileUpdateUseCase',
+    SchedulesUseCase: 'SchedulesUseCase',
 }

@@ -1,7 +1,7 @@
 export class Email {
     private readonly email: string;
 
-    private constructor(email: string) {
+    constructor(email: string) {
         this.email = email;
     }
 

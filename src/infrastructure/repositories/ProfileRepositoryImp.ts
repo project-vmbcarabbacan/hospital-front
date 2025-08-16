@@ -4,6 +4,7 @@ import { ID } from "../../domain/valueObjects/ID";
 import { ApiService } from "../api/ApiService";
 import { ApiError } from "../../domain/entities/ApiError";
 import { Profile } from "../../domain/entities/Profile";
+import { UpdateByField } from "../../presentation/components/utils/types";
 
 export class ProfileRepositoryImpl implements ProfileRepository {
     constructor(private api: ApiService) { }
@@ -31,4 +32,19 @@ export class ProfileRepositoryImpl implements ProfileRepository {
             }
         }
     }
+
+    async updateProfile(form: UpdateByField): Promise<void> {
+        try {
+            await this.api.post('/profile/update', form)
+        } catch (err: unknown) {
+            if (axios.isAxiosError<ApiError>(err)) {
+                const message = err.response?.data?.message || err.message || 'Profile failed';
+                throw new Error(message)
+            } else {
+                throw new Error('Unexpected error')
+            }
+        }
+    }
+
+
 }

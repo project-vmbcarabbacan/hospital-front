@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../../domain/entities/User";
 import { ID } from "../../../domain/valueObjects/ID";
 import axios from "axios";
 import { ApiError } from "../../../domain/entities/ApiError";
 import { container } from "../../../di/container";
 import { ProfileUseCase } from "../../usecases/Profile/ProfileUseCase";
 import { TOKENS } from "../../../di/types";
-import { BasicInformation, ProfileInformation } from "../../../presentation/components/utils/types";
+import { BasicInformation, ProfileInformation, UpdateByField } from "../../../presentation/components/utils/types";
 import { Profile } from "../../../domain/entities/Profile";
+import { ProfileUpdateUseCase } from "../../usecases/Profile/ProfileUpdateUseCase";
 
 
 interface ProfileState {
@@ -31,9 +31,24 @@ export const getProfileById = createAsyncThunk(
 
         } catch (err: unknown) {
             if (axios.isAxiosError<ApiError>(err)) {
-                return rejectWithValue(err.response?.data?.message || err.message || 'Login failed');
+                return rejectWithValue(err.response?.data?.message || err.message || 'Profile failed');
             }
-            return rejectWithValue('Unexpected login error');
+            return rejectWithValue('Unexpected profile error');
+        }
+    }
+)
+
+export const updateInformation = createAsyncThunk(
+    'profile/update',
+    async (form: UpdateByField, { rejectWithValue }) => {
+        try {
+            const profileUpdateUseCase = container.resolve<ProfileUpdateUseCase>(TOKENS.ProfileUpdateUseCase);
+            await profileUpdateUseCase.execute(form)
+        } catch (err: unknown) {
+            if (axios.isAxiosError<ApiError>(err)) {
+                return rejectWithValue(err.response?.data?.message || err.message || 'Update profile failed');
+            }
+            return rejectWithValue('Unexpected profile update error');
         }
     }
 )

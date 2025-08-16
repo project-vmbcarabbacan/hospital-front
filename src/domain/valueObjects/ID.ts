@@ -1,7 +1,7 @@
 export class ID {
     private readonly id: string | number;
 
-    private constructor(id: string | number) {
+    constructor(id: string | number) {
         this.id = id;
     }
 

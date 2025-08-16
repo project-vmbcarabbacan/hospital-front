@@ -1,10 +1,11 @@
 import React from "react";
-import { Column, Row } from "../utils/types";
+import { Column } from "../utils/types";
 import { Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TablePagination } from "@mui/material";
+import { AppointmentSchedule } from "../../../domain/entities/AppointmentSchedule";
 
 interface TableProp {
     columns: Column[]
-    rows: Row[]
+    rows: AppointmentSchedule[] | null
     page: number
     total: number
     rowsPerPage: number
@@ -21,6 +22,32 @@ const HospitalTable: React.FC<TableProp> = ({
     handleChangePage,
     handleChangeRowsPerPage
 }) => {
+
+    const tableRows = rows && rows.length > 0 ? (
+        rows.map((row, index) => (
+            <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                {columns.map((column) => {
+                    const value = row[column.value];
+                    return (
+                        <TableCell
+                            key={column.value}
+                            align={column.align}
+                            onClick={() => column.action?.(row)}
+                            style={{ cursor: column.action ? 'pointer' : 'default' }}
+                        >
+                            {String(value)}
+                        </TableCell>
+                    );
+                })}
+            </TableRow>
+        ))
+    ) : (
+        <TableRow>
+            <TableCell colSpan={columns.length} align="center">
+                No data available
+            </TableCell>
+        </TableRow>
+    );
 
     return (
         <Paper sx={{ width: '100%' }}>
@@ -41,26 +68,7 @@ const HospitalTable: React.FC<TableProp> = ({
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
-                            .map((row, index) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                                        {columns.map((column) => {
-                                            const value = row[column.value];
-                                            return (
-                                                <TableCell
-                                                    key={column.value}
-                                                    align={column.align}
-                                                    onClick={() => column.action?.(row)}
-                                                    style={{ cursor: column.action ? 'pointer' : 'default' }}
-                                                >
-                                                    {String(value)}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
+                        {tableRows}
                     </TableBody>
                 </Table>
             </TableContainer>

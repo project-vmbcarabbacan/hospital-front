@@ -9,15 +9,14 @@ import MembershipAffiliationTab from "./Tabs/MembershipAffiliation";
 import DocumentUploadTab from "./Tabs/DocumentUpload";
 import SecurityTab from "./Tabs/Security";
 import { LabelValue } from "../utils/types";
+import { useAppSelector } from "../../../app/store/hooks";
 
 
 
 const Tabs: React.FC = () => {
-    const tabs: LabelValue[] = [
-        {
-            label: 'Schedules',
-            value: 1
-        },
+    const { user } = useAppSelector(state => state.auth)
+
+    const baseTabs: LabelValue[] = [
         {
             label: 'Bio',
             value: 2
@@ -44,11 +43,17 @@ const Tabs: React.FC = () => {
         },
     ]
 
-    const [value, setValue] = React.useState(1);
+    const tabs: LabelValue[] = user?.role_id === 3
+        ? [{ label: 'Schedules', value: 1 }, ...baseTabs]
+        : baseTabs;
+
+    const defaultTab = user?.role_id === 3 ? 1 : 2;
+    const [value, setValue] = React.useState(defaultTab);
 
     const handleChange = (value: number) => {
         setValue(value)
     }
+
 
     return (
         <Box
@@ -69,7 +74,7 @@ const Tabs: React.FC = () => {
                     tabs={tabs}
                     onChange={handleChange}
                 />
-                <ScheduleTab value={value} />
+                {user?.role_id === 3 && <ScheduleTab value={value} />}
                 <BioTab value={value} />
                 <AchievementTab value={value} />
                 <EducationQualificationTab value={value} />

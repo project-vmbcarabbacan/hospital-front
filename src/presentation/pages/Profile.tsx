@@ -5,23 +5,35 @@ import ProfileInformation from '../components/profile/Information';
 import BasicInformation from '../components/profile/Basic';
 import TabInformation from '../components/profile/Tabs';
 import { useDispatch } from 'react-redux';
-import { getProfileById } from '../../app/store/slices/profileSlice';
+import { getProfileById, updateInformation } from '../../app/store/slices/profileSlice';
 import { ID } from '../../domain/valueObjects/ID';
 import { useAppSelector } from '../../app/store/hooks';
+import { UpdateByField } from '../components/utils/types';
 
 const Reports: React.FC = () => {
 
     const dispatch = useDispatch()
     const hasDispatched = useRef(false)
+    const { profile_information, basic_information } = useAppSelector(state => state.profile)
+    const { user } = useAppSelector(state => state.auth)
 
     useEffect(() => {
         if (!hasDispatched.current) {
             hasDispatched.current = true
-            dispatch(getProfileById(new ID(1)))
+            dispatch(getProfileById(new ID(user.id)))
         }
     }, [dispatch])
 
-    const { profile_information, basic_information } = useAppSelector(state => state.profile)
+
+    const handleUpdate = (field: string, value: string) => {
+        const data: UpdateByField = {
+            user_id: basic_information!.employee_id,
+            field,
+            value
+        }
+
+        dispatch(updateInformation(data))
+    }
 
     return (
         <Grid container >
@@ -49,11 +61,12 @@ const Reports: React.FC = () => {
                         workFor={basic_information!.work_for}
                         licenseNumber={basic_information!.license_number}
                         licenseExpiry={basic_information!.license_expiry}
-                        birthDate={basic_information!.birth_date}
+                        birthdate={basic_information!.birth_date}
                         address={basic_information!.address}
                         daysOfWorking={basic_information!.days_of_working}
                         workTimings={basic_information!.work_timing}
                         occupationType={basic_information!.occupation_type}
+                        onSubmit={handleUpdate}
                     />) : ('')}
             </Grid>
             <Grid size={{ xs: 12, lg: 7 }}>

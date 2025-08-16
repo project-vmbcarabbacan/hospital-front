@@ -18,7 +18,7 @@ interface BasicInformationProps {
     workFor: string;
     licenseNumber: string;
     licenseExpiry: string;
-    birthDate: string;
+    birthdate: string;
     address: string;
     daysOfWorking: string;
     workTimings: string;
@@ -32,7 +32,7 @@ const BasicInformation: React.FC<BasicInformationProps> = ({
     workFor,
     licenseNumber,
     licenseExpiry,
-    birthDate,
+    birthdate,
     address,
     daysOfWorking,
     workTimings,
@@ -43,7 +43,7 @@ const BasicInformation: React.FC<BasicInformationProps> = ({
     const [formData, setFormData] = useState({
         licenseNumber,
         licenseExpiry,
-        birthDate,
+        birthdate,
         address,
         daysOfWorking,
         workTimings,
@@ -128,8 +128,8 @@ const BasicInformation: React.FC<BasicInformationProps> = ({
                         <EditableLabelTextField
                             label="Birth Date"
                             type="date"
-                            value={formData.birthDate}
-                            onChange={(val) => handleFieldChange('birthDate', val)}
+                            value={formData.birthdate}
+                            onChange={(val) => handleFieldChange('birthdate', val)}
                         />
                     </Grid>
                     <Grid size={{ xs: 12, md: 6 }}>

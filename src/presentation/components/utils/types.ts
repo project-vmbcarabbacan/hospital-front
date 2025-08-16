@@ -43,3 +43,14 @@ export interface BasicInformation {
     work_timing: string,
     occupation_type: string,
 }
+
+export interface UpdateByField {
+    user_id: number,
+    field: string,
+    value: string
+}
+
+export interface DoctorSchedulesByDate {
+    user_id: number,
+    date: string
+}
