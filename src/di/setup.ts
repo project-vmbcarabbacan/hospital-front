@@ -16,6 +16,7 @@ import { ProfileUseCase } from '../app/usecases/Profile/ProfileUseCase'
 import { ProfileUpdateUseCase } from '../app/usecases/Profile/ProfileUpdateUseCase'
 import { SchedulesUseCase } from '../app/usecases/Profile/SchedulesUseCase'
 import { UploadProfileUseCase } from '../app/usecases/Image/UploadProfileUseCase'
+import { AchievementAddUseCase } from '../app/usecases/Profile/AchievementAddUseCase'
 
 
 export function setup() {
@@ -32,6 +33,7 @@ export function setup() {
     const themeUseCase = new ThemeUseCase(themeRepository)
     const profileUseCase = new ProfileUseCase(profileRepositoryImp)
     const profileUpdateUseCase = new ProfileUpdateUseCase(profileRepositoryImp)
+    const achievementAddUseCase = new AchievementAddUseCase(profileRepositoryImp)
     const schedulesUseCase = new SchedulesUseCase(scheduleRepositoryImpl)
     const uploadProfileUseCase = new UploadProfileUseCase(imageRepositoryImpl)
 
@@ -51,6 +53,7 @@ export function setup() {
 
     container.register(TOKENS.ProfileUseCase, profileUseCase)
     container.register(TOKENS.ProfileUpdateUseCase, profileUpdateUseCase)
+    container.register(TOKENS.AchievementAddUseCase, achievementAddUseCase)
     container.register(TOKENS.SchedulesUseCase, schedulesUseCase)
     container.register(TOKENS.UploadProfileUseCase, uploadProfileUseCase)
 }

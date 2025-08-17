@@ -19,4 +19,5 @@ export const TOKENS = {
     ProfileUpdateUseCase: 'ProfileUpdateUseCase',
     SchedulesUseCase: 'SchedulesUseCase',
     UploadProfileUseCase: 'UploadProfileUseCase',
+    AchievementAddUseCase: 'AchievementAddUseCase',
 }

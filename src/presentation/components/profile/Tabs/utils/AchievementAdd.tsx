@@ -8,6 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Box, TextField, Autocomplete } from '@mui/material';
+import { useAppDispatch } from '../../../../../app/store/hooks';
+import { achievementAdd } from '../../../../../app/store/slices/profileSlice';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -25,6 +27,8 @@ interface AlertDialogProps {
 
 const AlertDialog: React.FC<AlertDialogProps> = ({ open, handleClose }) => {
 
+    const dispatch = useAppDispatch()
+
     const [form, setForm] = useState({
         title: '',
         description: '',
@@ -37,6 +41,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({ open, handleClose }) => {
         event.preventDefault();
         if (!validate()) return
 
+        dispatch(achievementAdd(form))
         clearForm()
     }
 

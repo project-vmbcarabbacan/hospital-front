@@ -38,37 +38,33 @@ const Reports: React.FC = () => {
     return (
         <Grid container >
             <Grid size={{ xs: 12, lg: 5 }}>
-                {profile_information ?
-                    (
-                        <ProfileInformation
-                            user_id={profile_information!.user_id}
-                            name={profile_information!.name}
-                            email={profile_information!.email}
-                            contact={profile_information!.contact}
-                            avatarUrl={profile_information!.avatar_url}
-                            status={profile_information!.status}
-                            role={profile_information!.role}
-                            department={profile_information!.department}
-                            rating={profile_information!.rating}
-                            isFlex={true}
-                        />
-                    ) : ('')
+                {profile_information && <ProfileInformation
+                    user_id={profile_information!.user_id}
+                    name={profile_information!.name}
+                    email={profile_information!.email}
+                    contact={profile_information!.contact}
+                    avatarUrl={profile_information!.avatar_url}
+                    status={profile_information!.status}
+                    role={profile_information!.role}
+                    department={profile_information!.department}
+                    rating={profile_information!.rating}
+                    isFlex={true}
+                />
                 }
 
-                {basic_information ?
-                    (<BasicInformation
-                        employeeId={basic_information!.employee_id}
-                        hireDate={basic_information!.hired_date}
-                        workFor={basic_information!.work_for}
-                        licenseNumber={basic_information!.license_number}
-                        licenseExpiry={basic_information!.license_expiry}
-                        birthdate={basic_information!.birth_date}
-                        address={basic_information!.address}
-                        daysOfWorking={basic_information!.days_of_working}
-                        workTimings={basic_information!.work_timing}
-                        occupationType={basic_information!.occupation_type}
-                        onSubmit={handleUpdate}
-                    />) : ('')}
+                {basic_information && <BasicInformation
+                    employeeId={basic_information!.employee_id}
+                    hireDate={basic_information!.hired_date}
+                    workFor={basic_information!.work_for}
+                    licenseNumber={basic_information!.license_number}
+                    licenseExpiry={basic_information!.license_expiry}
+                    birthdate={basic_information!.birth_date}
+                    address={basic_information!.address}
+                    daysOfWorking={basic_information!.days_of_working}
+                    workTimings={basic_information!.work_timing}
+                    occupationType={basic_information!.occupation_type}
+                    onSubmit={handleUpdate}
+                />}
             </Grid>
             <Grid size={{ xs: 12, lg: 7 }}>
                 <TabInformation />

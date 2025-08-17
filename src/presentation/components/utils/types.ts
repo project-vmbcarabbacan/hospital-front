@@ -54,3 +54,9 @@ export interface DoctorSchedulesByDate {
     user_id: number,
     date: string
 }
+
+export interface AddAchievement {
+    title: string,
+    year_awarded: string,
+    description: string
+}
