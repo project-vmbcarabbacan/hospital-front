@@ -13,11 +13,13 @@ import { ProfileUpdateUseCase } from "../../usecases/Profile/ProfileUpdateUseCas
 interface ProfileState {
     profile_information: ProfileInformation | null
     basic_information: BasicInformation | null
+    bio: string | null
 }
 
 const initialState: ProfileState = {
     profile_information: null,
-    basic_information: null
+    basic_information: null,
+    bio: null
 }
 
 export const getProfileById = createAsyncThunk(
@@ -62,6 +64,7 @@ const profileSlice = createSlice({
             .addCase(getProfileById.fulfilled, (state: ProfileState, actions: PayloadAction<Profile>) => {
                 state.profile_information = actions.payload.profile_information
                 state.basic_information = actions.payload.basic_information
+                state.bio = actions.payload.bio
             })
     }
 })

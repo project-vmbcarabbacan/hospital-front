@@ -5,6 +5,7 @@ export const TOKENS = {
     ThemeRepository: 'ThemeRepository',
     ProfileRepositoryImp: 'ProfileRepositoryImp',
     ScheduleRepository: 'ScheduleRepository',
+    ImageRepositoryImpl: 'ImageRepositoryImpl',
 
     LoginUseCase: 'LoginUseCase',
     LoggedInUserUseCase: 'LoggedInUserUseCase',
@@ -17,4 +18,5 @@ export const TOKENS = {
     ProfileUseCase: 'ProfileUseCase',
     ProfileUpdateUseCase: 'ProfileUpdateUseCase',
     SchedulesUseCase: 'SchedulesUseCase',
+    UploadProfileUseCase: 'UploadProfileUseCase',
 }

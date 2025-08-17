@@ -37,18 +37,30 @@ import {
 import { Button, Stack, useTheme } from "@mui/material";
 import useExtensions from "../utils/editorExtension";
 
+interface EditorFieldProps {
+    value: string | null,
+    onSubmit: (newValue: string) => void
+}
 
 
-const EditorField: React.FC = () => {
+const EditorField: React.FC<EditorFieldProps> = ({
+    value,
+    onSubmit
+}) => {
     const theme = useTheme()
 
 
     const editor = useEditor({
         extensions: useExtensions(),
-        content: "<p>Hello <b>world</b>!</p>",
+        content: value,
     });
 
     const [submittedContent, setSubmittedContent] = useState("");
+
+    const handleSubmit = (editor: string) => {
+        setSubmittedContent(editor)
+        onSubmit(editor)
+    }
 
 
     return (
@@ -120,21 +132,15 @@ const EditorField: React.FC = () => {
                             <MenuButtonCode />
                             <MenuDivider />
 
-                            <MenuButtonImageUpload
+                            {/* <MenuButtonImageUpload
                                 onUploadFiles={(files) =>
-                                    // For the sake of a demo, we don't have a server to upload the files
-                                    // to, so we'll instead convert each one to a local "temporary" object
-                                    // URL. This will not persist properly in a production setting. You
-                                    // should instead upload the image files to your server, or perhaps
-                                    // convert the images to bas64 if you would like to encode the image
-                                    // data directly into the editor content, though that can make the
-                                    // editor content very large.
+
                                     files.map((file) => ({
                                         src: URL.createObjectURL(file),
                                         alt: file.name,
                                     }))
                                 }
-                            />
+                            /> */}
                             <MenuDivider />
 
                             <MenuButtonHorizontalRule />
@@ -170,7 +176,7 @@ const EditorField: React.FC = () => {
                                 variant="contained"
                                 size="small"
                                 onClick={() => {
-                                    setSubmittedContent(editor!.getHTML());
+                                    handleSubmit(editor!.getHTML());
                                 }}
                             >
                                 Save

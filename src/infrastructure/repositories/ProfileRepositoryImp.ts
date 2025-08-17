@@ -20,6 +20,7 @@ export class ProfileRepositoryImpl implements ProfileRepository {
             const profile = new Profile(
                 response.data.data.profile_information,
                 response.data.data.basic_information,
+                response.data.data.bio,
             )
 
             return profile

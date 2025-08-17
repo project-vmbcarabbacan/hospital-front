@@ -41,6 +41,7 @@ const Reports: React.FC = () => {
                 {profile_information ?
                     (
                         <ProfileInformation
+                            user_id={profile_information!.user_id}
                             name={profile_information!.name}
                             email={profile_information!.email}
                             contact={profile_information!.contact}

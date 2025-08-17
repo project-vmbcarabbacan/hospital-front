@@ -4,8 +4,11 @@ import LabelValueField from "../shared/LabelValueField";
 import AvatarCropper from "../shared/AvatarField";
 import StatusField from "../shared/StatusField";
 import Rating from '@mui/material/Rating';
+import { useAppDispatch } from "../../../app/store/hooks";
+import { uploadAvatar } from "../../../app/store/slices/imageSlice";
 
 interface InformationProps {
+    user_id: number,
     name: string
     email: string
     contact: string
@@ -18,14 +21,18 @@ interface InformationProps {
 }
 
 const ProfileInformation: React.FC<InformationProps> = ({
-    name, email, contact, status, avatarUrl, role, department, rating, isFlex
+    user_id, name, email, contact, status, avatarUrl, role, department, rating, isFlex
 }) => {
     const theme = useTheme();
+    const dispatch = useAppDispatch()
     const isMobile = useMediaQuery(theme.breakpoints.between('xs', 'lg'));
 
-    const handleAvatarChange = (image: string) => {
-        // setAvatar(image)
-        console.log({ image })
+    const handleAvatarChange = (image: Blob) => {
+        const form = new FormData()
+        form.append('avatar', image)
+        form.append('user_id', user_id.toString())
+
+        dispatch(uploadAvatar(form))
     }
 
     return (

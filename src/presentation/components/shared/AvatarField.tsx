@@ -15,7 +15,7 @@ import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/cropImage';
 
 interface AvatarUploadProps {
-    onImageChange: (image: string) => void;
+    onImageChange: (image: Blob) => void;
     initialImage?: string;
     size?: number;
     maxSizeMB?: number;
@@ -63,9 +63,9 @@ const AvatarUploadWithCrop: React.FC<AvatarUploadProps> = ({
 
     const handleCropSave = async () => {
         try {
-            const cropped = await getCroppedImg(imageSrc!, cropAreaPixels);
-            setCroppedImage(cropped);
-            onImageChange(cropped);
+            const { blob, url } = await getCroppedImg(imageSrc!, cropAreaPixels);
+            setCroppedImage(url);
+            onImageChange(blob);
         } catch (error) {
             console.error('Cropping failed:', error);
         }

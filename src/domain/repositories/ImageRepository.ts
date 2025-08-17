@@ -1,3 +1,3 @@
 export interface ImageRepository {
-    uploadProfile(image: Blob): Promise<void>;
+    uploadProfile(formData: FormData): Promise<void>;
 }

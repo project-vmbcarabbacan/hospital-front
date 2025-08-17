@@ -6,6 +6,7 @@ import { AuthRepositoryImpl } from '../infrastructure/repositories/AuthRepositor
 import { ThemeRepositoryImpl } from '../infrastructure/repositories/ThemeRepositoryImpl'
 import { ProfileRepositoryImpl } from '../infrastructure/repositories/ProfileRepositoryImp'
 import { ScheduleRepositoryImpl } from '../infrastructure/repositories/ScheduleRepositoryImp'
+import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl'
 
 import { LoginUseCase } from '../app/usecases/Auth/LoginUseCase'
 import { LoggedInUserUseCase } from '../app/usecases/Auth/LoggedInUserUseCase'
@@ -14,6 +15,7 @@ import { ThemeUseCase } from '../app/usecases/Theme/ThemeUseCase'
 import { ProfileUseCase } from '../app/usecases/Profile/ProfileUseCase'
 import { ProfileUpdateUseCase } from '../app/usecases/Profile/ProfileUpdateUseCase'
 import { SchedulesUseCase } from '../app/usecases/Profile/SchedulesUseCase'
+import { UploadProfileUseCase } from '../app/usecases/Image/UploadProfileUseCase'
 
 
 export function setup() {
@@ -22,6 +24,7 @@ export function setup() {
     const themeRepository = new ThemeRepositoryImpl(api)
     const profileRepositoryImp = new ProfileRepositoryImpl(api)
     const scheduleRepositoryImpl = new ScheduleRepositoryImpl(api)
+    const imageRepositoryImpl = new ImageRepositoryImpl(api)
 
     const loginUseCase = new LoginUseCase(authRepository)
     const loggedInUserUseCase = new LoggedInUserUseCase(authRepository)
@@ -30,6 +33,7 @@ export function setup() {
     const profileUseCase = new ProfileUseCase(profileRepositoryImp)
     const profileUpdateUseCase = new ProfileUpdateUseCase(profileRepositoryImp)
     const schedulesUseCase = new SchedulesUseCase(scheduleRepositoryImpl)
+    const uploadProfileUseCase = new UploadProfileUseCase(imageRepositoryImpl)
 
 
     container.register(TOKENS.ApiService, api)
@@ -37,6 +41,7 @@ export function setup() {
     container.register(TOKENS.ThemeRepository, themeRepository)
     container.register(TOKENS.ProfileRepositoryImp, profileRepositoryImp)
     container.register(TOKENS.ScheduleRepository, scheduleRepositoryImpl)
+    container.register(TOKENS.ImageRepositoryImpl, imageRepositoryImpl)
 
     container.register(TOKENS.LoginUseCase, loginUseCase)
     container.register(TOKENS.LoggedInUserUseCase, loggedInUserUseCase)
@@ -47,4 +52,5 @@ export function setup() {
     container.register(TOKENS.ProfileUseCase, profileUseCase)
     container.register(TOKENS.ProfileUpdateUseCase, profileUpdateUseCase)
     container.register(TOKENS.SchedulesUseCase, schedulesUseCase)
+    container.register(TOKENS.UploadProfileUseCase, uploadProfileUseCase)
 }

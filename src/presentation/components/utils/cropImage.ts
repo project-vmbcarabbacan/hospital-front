@@ -1,7 +1,7 @@
 export default function getCroppedImg(
     imageSrc: string,
     pixelCrop: { x: number; y: number; width: number; height: number }
-): Promise<string> {
+): Promise<{ blob: Blob; url: string }> {
     return new Promise((resolve, reject) => {
         const image = new Image();
         image.src = imageSrc;
@@ -14,7 +14,6 @@ export default function getCroppedImg(
             const ctx = canvas.getContext('2d');
             if (!ctx) return reject('Canvas context not available');
 
-            // Draw cropped area from source image onto canvas
             ctx.drawImage(
                 image,
                 pixelCrop.x,
@@ -27,11 +26,10 @@ export default function getCroppedImg(
                 pixelCrop.height
             );
 
-            // Convert canvas to blob and create object URL
             canvas.toBlob((blob) => {
                 if (!blob) return reject('Failed to create blob');
-                const croppedImageUrl = URL.createObjectURL(blob);
-                resolve(croppedImageUrl);
+                const url = URL.createObjectURL(blob);
+                resolve({ blob, url });
             }, 'image/jpeg');
         };
 

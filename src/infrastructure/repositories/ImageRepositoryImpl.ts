@@ -6,12 +6,10 @@ import { ApiError } from "../../domain/entities/ApiError";
 export class ImageRepositoryImpl implements ImageRepository {
     constructor(private api: ApiService) { }
 
-    async uploadProfile(image: Blob): Promise<void> {
+    async uploadProfile(formData: FormData): Promise<void> {
         try {
-            const formData = new FormData();
-            formData.append('image', image, 'avatar.png');
 
-            await this.api.post('/api/hpt/upload-profile', formData, {
+            await this.api.post('/image/upload/avatar', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
